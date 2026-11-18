@@ -531,12 +531,11 @@ footer {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    z-index: 9999;
-    padding: 12px 18px;
-    border: none;
+    padding: 12px 20px;
+    border: 1px solid #a855f7;
     border-radius: 30px;
-    background: #d4af37;
-    color: #111;
+    background: #171329;
+    color: white;
     cursor: pointer;
-    font-weight: bold;
-}
+    z-index: 1000;
+} 
