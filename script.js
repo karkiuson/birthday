@@ -33,17 +33,41 @@ if (surpriseBtn && surpriseMessage) {
         surpriseBtn.textContent = "Surprise Opened! 💖";
     });
 }
+
 const music = document.getElementById("bgMusic");
 const musicBtn = document.getElementById("musicBtn");
 
-musicBtn.addEventListener("click", function () {
+// Restore music position and playback preference
+const savedTime = sessionStorage.getItem("musicTime");
+const shouldPlay = sessionStorage.getItem("musicPlaying");
 
+if (savedTime !== null) {
+    music.addEventListener("loadedmetadata", function () {
+        music.currentTime = Number(savedTime);
+    }, { once: true });
+}
+
+if (shouldPlay === "true") {
+    musicBtn.textContent = "🎵 Start Music";
+}
+
+musicBtn.addEventListener("click", async function () {
     if (music.paused) {
-        music.play();
-        musicBtn.innerHTML = "⏸ Pause Music";
+        try {
+            await music.play();
+            sessionStorage.setItem("musicPlaying", "true");
+            musicBtn.textContent = "⏸ Pause Music";
+        } catch (error) {
+            console.log("Music could not play:", error);
+        }
     } else {
         music.pause();
-        musicBtn.innerHTML = "🎵 Play Music";
+        sessionStorage.setItem("musicPlaying", "false");
+        musicBtn.textContent = "🎵 Play Music";
     }
+});
 
+// Save playback position before leaving the page
+window.addEventListener("pagehide", function () {
+    sessionStorage.setItem("musicTime", music.currentTime);
 });
